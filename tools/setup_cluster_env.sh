@@ -24,7 +24,14 @@ if type module >/dev/null 2>&1; then
     module purge || true
     for module_name in "$ANACONDA_MODULE" "$GCC_MODULE" "$CUDA_MODULE"; do
         if [[ -n "$module_name" ]]; then
-            module load "$module_name"
+            if ! module load "$module_name"; then
+                if [[ "$module_name" == "$ANACONDA_MODULE" ]] && [[ -f "$CONDA_SH" ]]; then
+                    echo "WARNING: module '$module_name' was not found; using CONDA_SH=$CONDA_SH instead." >&2
+                else
+                    echo "ERROR: Unable to load required module '$module_name'." >&2
+                    exit 1
+                fi
+            fi
         fi
     done
 fi
