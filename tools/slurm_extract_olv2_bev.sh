@@ -21,11 +21,7 @@ CHECKPOINT="${CHECKPOINT:-}"
 SPLIT="${SPLIT:-train}"
 MODES="${MODES:-all}"
 OUTPUT_DIR="${OUTPUT_DIR:-/scratch/$USER/GMM_embeddings_vad}"
-ENV_NAME="${ENV_NAME:-vad}"
-CONDA_SH="${CONDA_SH:-$HOME/miniconda3/etc/profile.d/conda.sh}"
-CONDA_INIT_SCRIPT="${CONDA_INIT_SCRIPT:-$HOME/.bashrc}"
-ANACONDA_MODULE="${ANACONDA_MODULE:-}"
-GCC_MODULE="${GCC_MODULE:-}"
+ENV_NAME="${ENV_NAME:-lanesegnet}"
 CUDA_MODULE="${CUDA_MODULE:-cuda/12.1}"
 MAX_SAMPLES="${MAX_SAMPLES:-}"
 DISABLE_TEMPORAL="${DISABLE_TEMPORAL:-0}"
@@ -35,33 +31,11 @@ if [[ -z "$CHECKPOINT" ]]; then
     exit 1
 fi
 
-if type module >/dev/null 2>&1; then
-    module purge || true
-    for module_name in "$ANACONDA_MODULE" "$GCC_MODULE" "$CUDA_MODULE"; do
-        if [[ -n "$module_name" ]]; then
-            if ! module load "$module_name"; then
-                if [[ "$module_name" == "$ANACONDA_MODULE" ]] && [[ -f "$CONDA_SH" ]]; then
-                    echo "WARNING: module '$module_name' was not found; using CONDA_SH=$CONDA_SH instead." >&2
-                else
-                    echo "ERROR: Unable to load required module '$module_name'." >&2
-                    exit 1
-                fi
-            fi
-        fi
-    done
-fi
-
-if [[ -f "$CONDA_SH" ]]; then
-    source "$CONDA_SH"
-elif [[ -f "$CONDA_INIT_SCRIPT" ]]; then
-    source "$CONDA_INIT_SCRIPT"
-else
-    echo "Neither CONDA_SH nor CONDA_INIT_SCRIPT could be sourced." >&2
-    exit 1
-fi
+module load "$CUDA_MODULE"
+source ~/.bashrc
 
 if ! command -v conda >/dev/null 2>&1; then
-    echo "conda command not found after sourcing activation scripts." >&2
+    echo "conda command not found after sourcing ~/.bashrc." >&2
     exit 1
 fi
 
