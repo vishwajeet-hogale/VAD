@@ -4,6 +4,8 @@ Following https://mmdetection3d.readthedocs.io/en/latest/getting_started.html#in
 
 Detailed package versions can be found in [requirements.txt](../requirements.txt).
 
+For Slurm-based HPC environments, use the cluster-specific guide in [cluster_setup.md](cluster_setup.md).
+
 
 
 **a. Create a conda virtual environment and activate it.**

@@ -72,6 +72,7 @@ https://github.com/hustvl/VAD/assets/45144254/153b9bf0-5159-46b5-9fab-573baf5c61
 
 ## Getting Started
 - [Installation](docs/install.md)
+- [Cluster Setup](docs/cluster_setup.md)
 - [Prepare Dataset](docs/prepare_dataset.md)
 - [Train and Eval](docs/train_eval.md)
 - [Visualization](docs/visualization.md)
