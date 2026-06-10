@@ -20,6 +20,7 @@ CONFIG="${CONFIG:-projects/configs/VAD/VAD_tiny_stage_1.py}"
 WORK_DIR="${WORK_DIR:-$PROJECT_ROOT/work_dirs/vad_tiny_stage_1}"
 ENV_NAME="${ENV_NAME:-vad}"
 CONDA_SH="${CONDA_SH:-$HOME/miniconda3/etc/profile.d/conda.sh}"
+CONDA_INIT_SCRIPT="${CONDA_INIT_SCRIPT:-$HOME/.bashrc}"
 ANACONDA_MODULE="${ANACONDA_MODULE:-}"
 GCC_MODULE="${GCC_MODULE:-}"
 CUDA_MODULE="${CUDA_MODULE:-cuda/12.1}"
@@ -41,12 +42,20 @@ if type module >/dev/null 2>&1; then
     done
 fi
 
-if [[ ! -f "$CONDA_SH" ]]; then
-    echo "conda.sh not found at $CONDA_SH"
+if [[ -f "$CONDA_SH" ]]; then
+    source "$CONDA_SH"
+elif [[ -f "$CONDA_INIT_SCRIPT" ]]; then
+    source "$CONDA_INIT_SCRIPT"
+else
+    echo "Neither CONDA_SH nor CONDA_INIT_SCRIPT could be sourced." >&2
     exit 1
 fi
 
-source "$CONDA_SH"
+if ! command -v conda >/dev/null 2>&1; then
+    echo "conda command not found after sourcing activation scripts." >&2
+    exit 1
+fi
+
 conda activate "$ENV_NAME"
 
 cd "$PROJECT_ROOT"

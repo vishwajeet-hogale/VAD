@@ -8,6 +8,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 ENV_NAME="${ENV_NAME:-vad}"
 PYTHON_VERSION="${PYTHON_VERSION:-3.8}"
 CONDA_SH="${CONDA_SH:-$HOME/miniconda3/etc/profile.d/conda.sh}"
+CONDA_INIT_SCRIPT="${CONDA_INIT_SCRIPT:-$HOME/.bashrc}"
 ANACONDA_MODULE="${ANACONDA_MODULE:-}"
 GCC_MODULE="${GCC_MODULE:-}"
 CUDA_MODULE="${CUDA_MODULE:-cuda/12.1}"
@@ -36,13 +37,21 @@ if type module >/dev/null 2>&1; then
     done
 fi
 
-if [[ ! -f "$CONDA_SH" ]]; then
-    echo "conda.sh not found at $CONDA_SH"
-    echo "Set CONDA_SH to your conda profile script and rerun."
+if [[ -f "$CONDA_SH" ]]; then
+    source "$CONDA_SH"
+elif [[ -f "$CONDA_INIT_SCRIPT" ]]; then
+    source "$CONDA_INIT_SCRIPT"
+else
+    echo "Neither CONDA_SH nor CONDA_INIT_SCRIPT could be sourced." >&2
+    echo "Set CONDA_SH or CONDA_INIT_SCRIPT to a working conda activation script and rerun." >&2
     exit 1
 fi
 
-source "$CONDA_SH"
+if ! command -v conda >/dev/null 2>&1; then
+    echo "conda command not found after sourcing activation scripts." >&2
+    echo "Set CONDA_SH or CONDA_INIT_SCRIPT so that 'conda activate $ENV_NAME' works." >&2
+    exit 1
+fi
 
 if ! conda env list | awk '{print $1}' | grep -Fxq "$ENV_NAME"; then
     conda create -y -n "$ENV_NAME" "python=$PYTHON_VERSION"

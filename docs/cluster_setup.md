@@ -23,6 +23,7 @@ export ANACONDA_MODULE=miniconda/24.3.0
 export GCC_MODULE=gcc/10.3.0
 export CUDA_MODULE=cuda/12.1
 export CONDA_SH=$HOME/miniconda3/etc/profile.d/conda.sh
+export CONDA_INIT_SCRIPT=$HOME/.bashrc
 
 bash tools/setup_cluster_env.sh
 ```
@@ -32,6 +33,7 @@ Notes:
 - The module names above are examples. Replace them with your cluster's actual module names.
 - If your cluster does not use environment modules, leave `ANACONDA_MODULE`, `GCC_MODULE`, and `CUDA_MODULE` unset.
 - If `conda` is already available in your shell, leave `ANACONDA_MODULE` unset and just point `CONDA_SH` at the correct `conda.sh` file.
+- If your cluster works like your LaneSegNet jobs, you can also leave `CONDA_SH` unset or incorrect and rely on `CONDA_INIT_SCRIPT=$HOME/.bashrc` so the scripts do `source ~/.bashrc` before `conda activate`.
 - The setup script prints a warning when using `cuda/12.1` because VAD still depends on Torch 1.9.1 + `mmcv-full==1.4.0` wheels built for cu111.
 - `requirements.txt` in this repo is a frozen environment snapshot, not the best bootstrap path for a fresh cluster install.
 
