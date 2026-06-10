@@ -1,4 +1,4 @@
-_base_ = ['./VAD_tiny_stage_1.py']
+_base_ = ['./VAD_tiny_stage_2.py']
 
 dataset_type = 'VADOpenLaneV2Dataset'
 data_root = '/scratch/hogale.v/OpenLaneV2/'
