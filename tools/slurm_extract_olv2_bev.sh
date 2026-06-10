@@ -32,7 +32,9 @@ if [[ -z "$CHECKPOINT" ]]; then
 fi
 
 module load "$CUDA_MODULE"
+set +u
 source ~/.bashrc
+set -u
 
 if ! command -v conda >/dev/null 2>&1; then
     echo "conda command not found after sourcing ~/.bashrc." >&2

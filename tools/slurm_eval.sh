@@ -47,14 +47,17 @@ if type module >/dev/null 2>&1; then
     done
 fi
 
+set +u
 if [[ -f "$CONDA_SH" ]]; then
     source "$CONDA_SH"
 elif [[ -f "$CONDA_INIT_SCRIPT" ]]; then
     source "$CONDA_INIT_SCRIPT"
 else
     echo "Neither CONDA_SH nor CONDA_INIT_SCRIPT could be sourced." >&2
+    set -u
     exit 1
 fi
+set -u
 
 if ! command -v conda >/dev/null 2>&1; then
     echo "conda command not found after sourcing activation scripts." >&2
