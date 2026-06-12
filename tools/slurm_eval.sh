@@ -2,7 +2,7 @@
 #SBATCH --job-name=vad-eval
 #SBATCH --output=logs/vad_eval_%j.out
 #SBATCH --error=logs/vad_eval_%j.err
-#SBATCH --partition=gpu
+#SBATCH --gres=gpu:v100-sxm2:1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:v100-sxm2:1
