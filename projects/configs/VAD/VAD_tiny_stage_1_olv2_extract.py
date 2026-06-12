@@ -3,6 +3,25 @@ _base_ = ['./VAD_tiny_stage_2.py']
 dataset_type = 'VADOpenLaneV2Dataset'
 data_root = '/scratch/hogale.v/OpenLaneV2/'
 
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    to_rgb=True,
+)
+
+class_names = [
+    'car',
+    'truck',
+    'construction_vehicle',
+    'bus',
+    'trailer',
+    'barrier',
+    'motorcycle',
+    'bicycle',
+    'pedestrian',
+    'traffic_cone',
+]
+
 input_modality = dict(
     use_lidar=False,
     use_camera=True,
